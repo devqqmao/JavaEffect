@@ -32,7 +32,7 @@ public class EffectHandlers {
 
         while (!cont.isDone()) {
             cont.run();
-            if ("ask".equals(context.getOperation())) {
+            if ("ask42".equals(context.getOperation())) {
                 context.setResult(21);
 //                cont.run();
             }

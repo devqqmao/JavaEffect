@@ -30,36 +30,29 @@ public class StateHandler {
 
     public static void handleState(Runnable comp) {
         Continuation k = new Continuation(scope, comp);
-//        while (!k.isDone()) {
-//        }
-//        k.run();
-        while(!k.isDone()) {
-            k.run();
-        }
+        k.run();
 
     }
 
     public static Integer get() {
         Continuation.yield(scope);
-        throw new IllegalStateException("Illegal control flow passing");
+        return context.getValue();
     }
 
 
     public static void put(Integer value) {
         context.setValue(value);
         Continuation.yield(scope);
-        throw new IllegalStateException("Illegal control flow passing");
     }
 
     public static void modify(Function<Integer, Integer> f) {
         context.setValue(f.apply(context.getValue()));
         Continuation.yield(scope);
-        throw new IllegalStateException("Illegal control flow passing");
     }
 
     public static Integer gets(Function<Integer, Integer> f) {
         Continuation.yield(scope);
-        throw new IllegalStateException("Illegal control flow passing");
+        return f.apply(context.getValue());
     }
 
 }
