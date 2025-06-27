@@ -25,13 +25,22 @@ public class Handler {
         Continuation.yield(scope);
     }
 
+    public static Integer next() {
+        context.effect = "next";
+        Continuation.yield(scope);
+        return context.result;
+    }
+
+
     public static Integer handle(Map<String, Consumer<Continuation>> handlers, Runnable comp) {
         Continuation k = new Continuation(scope, comp);
         k.run();
 
         while (!k.isDone()) {
             handlers.get(context.effect).accept(k);
+            // ...
         }
+
         return context.result;
     }
 }

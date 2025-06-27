@@ -1,9 +1,18 @@
 package org.handlers;
 
+import java.util.Map;
+import java.util.Vector;
+import java.util.function.Consumer;
+
 public class Context {
 
-    String effect;
-    Integer param;
-    Integer result;
+    public String effect;
+    public Integer param;
+    public Integer result;
 
+    Context() {
+        effect = "";
+        param = 0;
+        result = 0;
+    }
 }
