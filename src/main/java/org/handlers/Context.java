@@ -1,8 +1,6 @@
 package org.handlers;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class Context {
@@ -11,6 +9,7 @@ public class Context {
     public Integer param;
     public Integer result;
     public ArrayList<Map<String, Consumer<Continuation>>> handlersStack;
+    public Queue<Continuation> coroutinesQueue;
 
 
     Context() {
@@ -18,5 +17,6 @@ public class Context {
         param = 0;
         result = 0;
         handlersStack = new ArrayList<>();
+        coroutinesQueue = new LinkedList<>();
     }
 }

@@ -35,17 +35,32 @@ public class Handler {
     }
 
     public static boolean find_handler(Continuation k) {
-        String effect = context.effect;
         ListIterator<Map<String, Consumer<Continuation>>> it = context.handlersStack.listIterator(context.handlersStack.size());
         boolean is_handled = false;
         while (it.hasPrevious() && !is_handled) {
             Map<String, Consumer<Continuation>> element = it.previous();
-            if (element.containsKey(effect)) {
-                element.get(effect).accept(k);
+            if (element.containsKey(context.effect)) {
+                element.get(context.effect).accept(k);
                 is_handled = true;
             }
         }
         return is_handled;
+    }
+
+    public static void spawn(Runnable comp) {
+        context.effect = "spawn";
+        // ???
+    }
+
+    public static void suspend() {
+        Continuation.yield(scope);
+    }
+
+    public static void schedule(Continuation k) {
+        context.coroutinesQueue.add(k);
+        while (!context.coroutinesQueue.isEmpty()) {
+            k = context.coroutinesQueue.poll();
+        }
     }
 
 
