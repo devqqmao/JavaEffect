@@ -9,8 +9,8 @@ import static org.handlers.Handler.*;
 public class Main {
 
     public static void main(String[] args) {
-        dependency_injection();
-//        generator();
+//        dependency_injection();
+        nested_handling();
     }
 
     public static void dependency_injection() {
@@ -47,6 +47,35 @@ public class Main {
                     next();
                     next();
                     System.out.println(2);
+                }
+        );
+        System.out.println(res);
+    }
+
+    public static void nested_handling() {
+        int res = handle(
+                Map.of("put", Continuation::run
+                )
+                , () -> {
+                    int res0 = handle(
+                            Map.of("ask", (k) -> {
+                                        context.result = 1;
+                                        k.run();
+                                    }
+                            )
+                            , () -> {
+                                int res1 = handle(
+                                        Map.of(
+                                        )
+                                        , () -> {
+                                            int x = ask();
+                                            put(x);
+                                        }
+                                );
+                            }
+                    );
+                    put(res0 + res0);
+//                    ask(); will throw
                 }
         );
         System.out.println(res);

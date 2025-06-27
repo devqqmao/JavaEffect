@@ -1,6 +1,9 @@
 package org.handlers;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 public class Handler {
@@ -31,15 +34,36 @@ public class Handler {
         return context.result;
     }
 
+    public static boolean find_handler(Continuation k) {
+        String effect = context.effect;
+        ListIterator<Map<String, Consumer<Continuation>>> it = context.handlersStack.listIterator(context.handlersStack.size());
+        boolean is_handled = false;
+        while (it.hasPrevious() && !is_handled) {
+            Map<String, Consumer<Continuation>> element = it.previous();
+            if (element.containsKey(effect)) {
+                element.get(effect).accept(k);
+                is_handled = true;
+            }
+        }
+        return is_handled;
+    }
+
 
     public static Integer handle(Map<String, Consumer<Continuation>> handlers, Runnable comp) {
         Continuation k = new Continuation(scope, comp);
+
+        context.handlersStack.add(handlers);
+
         k.run();
 
         while (!k.isDone()) {
-            handlers.get(context.effect).accept(k);
-            // ...
+            boolean is_handled = find_handler(k);
+            if (!is_handled) {
+                throw new RuntimeException("No handler");
+            }
         }
+
+        context.handlersStack.removeLast();
 
         return context.result;
     }
