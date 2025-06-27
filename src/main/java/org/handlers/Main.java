@@ -27,11 +27,11 @@ public class Main {
         return res;
     }
 
-    public static Integer generator() {
+    public static Integer generator(Integer n) {
         int res = handle(
                 Map.of("next", (k) -> {
                             int i = 0;
-                            while (i < 2 && !k.isDone()) {
+                            while (i < n && !k.isDone()) {
                                 context.result = i;
                                 i += 1;
                                 k.run();
@@ -42,10 +42,11 @@ public class Main {
                         }
                 )
                 , () -> {
-                    System.out.println(1);
-                    next();
-                    next();
-                    System.out.println(2);
+                    int i = 0;
+                    while (i < n) {
+                        next();
+                        i += 1;
+                    }
                 }
         );
         return 0;

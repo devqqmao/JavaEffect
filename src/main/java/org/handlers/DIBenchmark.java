@@ -16,7 +16,8 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 1, time = 100, timeUnit = TimeUnit.MILLISECONDS)
 @Fork(3)
 @State(Scope.Benchmark)
-public class Benchmarks {
+@Threads(1)
+public class DIBenchmark {
 
     public interface ValueProvider {
         int getValue();
@@ -63,7 +64,7 @@ public class Benchmarks {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(Benchmarks.class.getSimpleName())
+                .include(DIBenchmark.class.getSimpleName())
                 .forks(1)
                 .build();
 
