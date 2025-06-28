@@ -10,30 +10,32 @@ public class Main {
 
     public static void main(String[] args) {
         dependency_injection();
+        generator(2);
+        nested_handling();
     }
 
-    public static Integer dependency_injection() {
-        int res = handle(
+    public static Object dependency_injection() {
+        Object res = handle(
                 Map.of(ASK, (k) -> {
-                            context.result = 2;
+                            context.setResult(2);
                             k.run();
                         }
                         , PUT, Continuation::run
                 )
                 , () -> {
-                    put(ask() + ask());
+                    put(ask());
                 }
         );
 
         return res;
     }
 
-    public static Integer generator(Integer n) {
-        int res = handle(
+    public static Object generator(Integer n) {
+        Object res = handle(
                 Map.of(NEXT, (k) -> {
-                            int i = 0;
+                            Integer i = 0;
                             while (i < n && !k.isDone()) {
-                                context.result = i;
+                                context.setResult(i);
                                 i += 1;
                                 k.run();
                             }
@@ -43,43 +45,43 @@ public class Main {
                         }
                 )
                 , () -> {
-                    int i = 0;
+                    Integer i = 0;
                     while (i < n) {
                         next();
                         i += 1;
                     }
                 }
         );
-        return 0;
+        return res;
     }
 
-    public static Integer nested_handling() {
-        int res = handle(
+    public static Object nested_handling() {
+        Object res = handle(
                 Map.of(PUT, Continuation::run
                 )
                 , () -> {
-                    int res0 = handle(
+                    Object res0 = handle(
                             Map.of(ASK, (k) -> {
-                                        context.result = 1;
+                                        context.setResult(2);
                                         k.run();
                                     }
                             )
                             , () -> {
-                                int res1 = handle(
+                                Object res1 = handle(
                                         Map.of(
                                         )
                                         , () -> {
-                                            int x = ask();
+                                            Object x = ask();
                                             put(x);
                                         }
                                 );
                             }
                     );
-                    put(res0 + res0);
+                    put(res0);
 //                    ask(); will throw
                 }
         );
-        return 0;
+        return res;
     }
 
 
