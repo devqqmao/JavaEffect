@@ -24,6 +24,7 @@ public class Main {
                     put(ask() + ask());
                 }
         );
+
         return res;
     }
 
