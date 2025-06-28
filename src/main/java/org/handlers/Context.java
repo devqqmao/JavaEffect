@@ -2,19 +2,19 @@ package org.handlers;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Vector;
 import java.util.function.Consumer;
+
+import static org.handlers.Effect.*;
 
 public class Context {
 
-    public String effect;
+    public Effect effect;
     public Integer param;
     public Integer result;
-    public ArrayList<Map<String, Consumer<Continuation>>> handlersStack;
-
+    public ArrayList<Map<Effect, Consumer<Continuation>>> handlersStack;
 
     Context() {
-        effect = "";
+        effect = Effect.NONE;
         param = 0;
         result = 0;
         handlersStack = new ArrayList<>();

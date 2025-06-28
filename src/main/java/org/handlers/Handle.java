@@ -1,12 +1,12 @@
 package org.handlers;
 
-import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-public class Handler {
+import static org.handlers.Effect.*;
+
+public class Handle {
 
     static Context context;
     static ContinuationScope scope;
@@ -17,29 +17,29 @@ public class Handler {
     }
 
     public static Integer ask() {
-        context.effect = "ask";
+        context.effect = ASK;
         Continuation.yield(scope);
         return context.result;
     }
 
     public static void put(Integer p) {
-        context.effect = "put";
+        context.effect = PUT;
         context.result = p;
         Continuation.yield(scope);
     }
 
     public static Integer next() {
-        context.effect = "next";
+        context.effect = NEXT;
         Continuation.yield(scope);
         return context.result;
     }
 
     public static boolean find_handler(Continuation k) {
-        String effect = context.effect;
-        ListIterator<Map<String, Consumer<Continuation>>> it = context.handlersStack.listIterator(context.handlersStack.size());
+        Effect effect = context.effect;
+        ListIterator<Map<Effect, Consumer<Continuation>>> it = context.handlersStack.listIterator(context.handlersStack.size());
         boolean is_handled = false;
         while (it.hasPrevious() && !is_handled) {
-            Map<String, Consumer<Continuation>> element = it.previous();
+            Map<Effect, Consumer<Continuation>> element = it.previous();
             if (element.containsKey(effect)) {
                 element.get(effect).accept(k);
                 is_handled = true;
@@ -49,7 +49,7 @@ public class Handler {
     }
 
 
-    public static Integer handle(Map<String, Consumer<Continuation>> handlers, Runnable comp) {
+    public static Integer handle(Map<Effect, Consumer<Continuation>> handlers, Runnable comp) {
         Continuation k = new Continuation(scope, comp);
 
         context.handlersStack.add(handlers);

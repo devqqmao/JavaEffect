@@ -1,10 +1,10 @@
 package org.handlers;
 
-
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import static org.handlers.Handler.*;
+import static org.handlers.Effect.*;
+import static org.handlers.Handle.*;
 
 public class Main {
 
@@ -14,11 +14,11 @@ public class Main {
 
     public static Integer dependency_injection() {
         int res = handle(
-                Map.of("ask", (k) -> {
+                Map.of(ASK, (k) -> {
                             context.result = 2;
                             k.run();
                         }
-                        , "put", Continuation::run
+                        , PUT, Continuation::run
                 )
                 , () -> {
                     put(ask() + ask());
@@ -30,7 +30,7 @@ public class Main {
 
     public static Integer generator(Integer n) {
         int res = handle(
-                Map.of("next", (k) -> {
+                Map.of(NEXT, (k) -> {
                             int i = 0;
                             while (i < n && !k.isDone()) {
                                 context.result = i;
@@ -55,11 +55,11 @@ public class Main {
 
     public static Integer nested_handling() {
         int res = handle(
-                Map.of("put", Continuation::run
+                Map.of(PUT, Continuation::run
                 )
                 , () -> {
                     int res0 = handle(
-                            Map.of("ask", (k) -> {
+                            Map.of(ASK, (k) -> {
                                         context.result = 1;
                                         k.run();
                                     }
