@@ -1,4 +1,4 @@
-package org.handlers;
+package org.handlers.Effects;
 
 public enum Effect {
     ASK,

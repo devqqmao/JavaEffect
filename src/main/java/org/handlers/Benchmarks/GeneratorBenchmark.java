@@ -1,8 +1,7 @@
-package org.handlers;
+package org.handlers.Benchmarks;
 
-import kotlin.sequences.Sequence;
+import org.handlers.Main;
 import org.handlers.handlers.KotlinBasicGenerator;
-import org.handlers.handlers.KotlinGeneratorsKt;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
@@ -41,7 +40,7 @@ public class GeneratorBenchmark {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(GeneratorBenchmark.class.getSimpleName())
+                .include(GeneratorBenchmark.class.getName())
                 .forks(1)
                 .build();
 

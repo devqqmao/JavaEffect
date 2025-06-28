@@ -1,10 +1,12 @@
 package org.handlers;
 
+import org.handlers.Continuation.Continuation;
+
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import static org.handlers.Effect.*;
-import static org.handlers.Handle.*;
+import static org.handlers.Effects.Effect.*;
+import static org.handlers.Effects.Handle.*;
 
 public class Main {
 

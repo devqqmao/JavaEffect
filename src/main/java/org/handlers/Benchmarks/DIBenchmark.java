@@ -1,5 +1,6 @@
-package org.handlers;
+package org.handlers.Benchmarks;
 
+import org.handlers.Main;
 import org.mockito.Mockito;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -64,7 +65,7 @@ public class DIBenchmark {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(DIBenchmark.class.getSimpleName())
+                .include(DIBenchmark.class.getName())
                 .forks(1)
                 .build();
 

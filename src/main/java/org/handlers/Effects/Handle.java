@@ -1,15 +1,18 @@
-package org.handlers;
+package org.handlers.Effects;
+
+import org.handlers.Continuation.Continuation;
+import org.handlers.Continuation.ContinuationScope;
 
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.handlers.Effect.*;
+import static org.handlers.Effects.Effect.*;
 
 public class Handle {
 
-    static Context context;
-    static ContinuationScope scope;
+    public static Context context;
+    public static ContinuationScope scope;
 
     static {
         context = new Context();

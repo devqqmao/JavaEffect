@@ -1,10 +1,12 @@
-package org.handlers;
+package org.handlers.Effects;
+
+import org.handlers.Continuation.Continuation;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.handlers.Effect.*;
+import static org.handlers.Effects.Effect.*;
 
 public class Context {
 
