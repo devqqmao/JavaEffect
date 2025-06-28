@@ -1,6 +1,7 @@
 # USER
 notes.txt
 JavaEffect.iml
+.idea/
 
 # Reference: https://github.com/github/gitignore
 # From: https://gist.github.com/edesdan/6bb43343740bcd54ef0f56a384a2f66f
@@ -76,6 +77,7 @@ gradle-app.setting
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
+
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
