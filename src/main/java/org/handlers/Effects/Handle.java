@@ -37,20 +37,18 @@ public class Handle {
         return context.getResult();
     }
 
-    public static boolean find_handler(Continuation k) {
+    public static void handle_effect(Continuation k) {
         Effect effect = context.getEffect();
-        ListIterator<Map<Effect, Consumer<Continuation>>> it = context.handlersStack.listIterator(context.handlersStack.size());
-        boolean is_handled = false;
+        var it = context.handlersStack.listIterator(context.handlersStack.size());
 
-        while (it.hasPrevious() && !is_handled) {
-            Map<Effect, Consumer<Continuation>> element = it.previous();
+        while (it.hasPrevious()) {
+            var element = it.previous();
             if (element.containsKey(effect)) {
                 element.get(effect).accept(k);
-                is_handled = true;
+                return;
             }
         }
-
-        return is_handled;
+        throw new RuntimeException("No handler found");
     }
 
 
@@ -62,10 +60,7 @@ public class Handle {
         k.run();
 
         while (!k.isDone()) {
-            boolean is_handled = find_handler(k);
-            if (!is_handled) {
-                throw new RuntimeException("No handler");
-            }
+            handle_effect(k);
         }
 
         context.handlersStack.removeLast();
