@@ -1,7 +1,9 @@
 package org.handlers.Benchmarks;
 
 import org.handlers.Main;
-import org.handlers.handlers.KotlinBasicGenerator;
+
+import static org.handlers.handlers.KotlinGeneratorsKt.*;
+
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
@@ -13,12 +15,10 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Warmup(iterations = 0, time = 1, timeUnit = TimeUnit.SECONDS)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
+@Warmup(iterations = 1, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 1, time = 1, timeUnit = TimeUnit.SECONDS)
-@Fork(3)
 @State(Scope.Benchmark)
-
 public class GeneratorBenchmark {
 
     @Param({"1000"})
@@ -26,13 +26,12 @@ public class GeneratorBenchmark {
 
     @Benchmark
     public void javaContinuationGenerator(Blackhole blackhole) {
-        blackhole.consume(Main.iterator(size));
+        blackhole.consume(Main.generator(size));
     }
-
 
     @Benchmark
     public void kotlinBasicGenerator(Blackhole blackhole) {
-        Iterator<Integer> iterator = new KotlinBasicGenerator(size);
+        Iterator<Integer> iterator = kotlinSequenceGenerator(size).iterator();
         while (iterator.hasNext()) {
             blackhole.consume(iterator.next());
         }
