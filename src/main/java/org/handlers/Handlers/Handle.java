@@ -16,6 +16,14 @@ public class Handle {
         scope = new ContinuationScope("Handle");
     }
 
+    public static Object getState() {
+        return context.getState();
+    }
+
+    public static void setState(Object state) {
+        context.setState(state);
+    }
+
     public static Object perform(String effect, Object state) {
         context.setEffect(effect);
         context.setState(state);
@@ -31,7 +39,7 @@ public class Handle {
 
     public static void handleEffect(Continuation k) {
         String effect = context.getEffect();
-        var it = context.handlersStack.listIterator(context.handlersStack.size());
+        var it = context.getHandlersStack().listIterator(context.getHandlersStack().size());
 
         while (it.hasPrevious()) {
             var element = it.previous();
@@ -40,7 +48,6 @@ public class Handle {
                 return;
             }
         }
-
         throw new RuntimeException("No handler found");
     }
 
@@ -48,7 +55,7 @@ public class Handle {
     public static Object handle(Map<String, Consumer<Continuation>> handlers, Runnable comp) {
         Continuation k = new Continuation(scope, comp);
 
-        context.handlersStack.add(handlers);
+        context.getHandlersStack().add(handlers);
 
         k.run();
 
@@ -56,7 +63,7 @@ public class Handle {
             handleEffect(k);
         }
 
-        context.handlersStack.removeLast();
+        context.getHandlersStack().removeLast();
 
         return context.getState();
     }

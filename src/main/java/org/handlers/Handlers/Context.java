@@ -10,7 +10,7 @@ public class Context {
 
     private String effect;
     private Object state;
-    public ArrayList<Map<String, Consumer<Continuation>>> handlersStack;
+    private ArrayList<Map<String, Consumer<Continuation>>> handlersStack;
 
     public String getEffect() {
         return effect;

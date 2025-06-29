@@ -2,6 +2,7 @@ package org.handlers;
 
 import org.handlers.Continuation.Continuation;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -10,15 +11,46 @@ import static org.handlers.Handlers.Handle.*;
 public class Main {
 
     public static void main(String[] args) {
-        dependency_injection();
-        iterator(2);
-        nested_handling();
+//        dependency_injection();
+//        nested_handling();
+        generator(3);
+    }
+
+    public static Object pure_effect() {
+        return handle(
+                Map.of("ASK", Continuation::run
+                )
+                , () -> {
+                    perform("ASK");
+                }
+        );
+    }
+
+    public static Object pure_compute() {
+        int res = 0;
+        for (int i = 0; i < 1000; i++) {
+            res += i;
+        }
+        return res;
+    }
+
+    public static Object perform_effect() {
+        return handle(
+                Map.of("ASK", (k) -> {
+                            setState(0);
+                            k.run();
+                        }
+                )
+                , () -> {
+                    perform("ASK");
+                }
+        );
     }
 
     public static Object dependency_injection() {
         Object res = handle(
                 Map.of("ASK", (k) -> {
-                            context.setState(2);
+                            setState(2);
                             k.run();
                         }
                         , "PUT", (k) -> {
@@ -34,17 +66,17 @@ public class Main {
         return res;
     }
 
-    public static Object iterator(Integer n) {
-        Object res = handle(
+    public static Object generator(Integer n) {
+        return handle(
                 Map.of("NEXT", (k) -> {
                             Integer i = 0;
                             while (i < n && !k.isDone()) {
-                                context.setState(i);
+                                setState(i);
                                 i += 1;
                                 k.run();
                             }
                             if (!k.isDone()) {
-                                throw new NoSuchElementException("ERROR");
+                                throw new NoSuchElementException();
                             }
                         }
                 )
@@ -52,28 +84,26 @@ public class Main {
                     Integer i = 0;
                     while (i < n) {
                         perform("NEXT");
-                        i += 1;
+                        i++;
                     }
                 }
         );
-        return res;
     }
 
     public static Object nested_handling() {
-        Object res = handle(
+        Object res0 = handle(
                 Map.of("PUT", Continuation::run
                 )
                 , () -> {
-                    Object res0 = handle(
+                    Object res1 = handle(
                             Map.of("ASK", (k) -> {
                                         context.setState(2);
                                         k.run();
                                     }
                             )
                             , () -> {
-                                Object res1 = handle(
-                                        Map.of(
-                                        )
+                                Object res2 = handle(
+                                        Map.of()
                                         , () -> {
                                             Object x = perform("ASK");
                                             perform("PUT", x);
@@ -81,12 +111,11 @@ public class Main {
                                 );
                             }
                     );
-                    perform("PUT", res0);
-//                    ask(); will throw
+                    perform("PUT", res1);
+//                    perform("ASK"); // ASK will throw
                 }
         );
-        return res;
+        return res0;
     }
-
 
 }
