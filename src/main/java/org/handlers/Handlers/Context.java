@@ -1,4 +1,4 @@
-package org.handlers.Effects;
+package org.handlers.Handlers;
 
 import org.handlers.Continuation.Continuation;
 
@@ -6,20 +6,18 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.handlers.Effects.Effect.*;
-
 public class Context {
 
-    public Effect effect;
+    public String effect;
     public Object param;
     public Object result;
-    public ArrayList<Map<Effect, Consumer<Continuation>>> handlersStack;
+    public ArrayList<Map<String, Consumer<Continuation>>> handlersStack;
 
-    public Effect getEffect() {
+    public String getEffect() {
         return effect;
     }
 
-    public void setEffect(Effect effect) {
+    public void setEffect(String effect) {
         this.effect = effect;
     }
 
@@ -39,16 +37,16 @@ public class Context {
         this.result = result;
     }
 
-    public ArrayList<Map<Effect, Consumer<Continuation>>> getHandlersStack() {
+    public ArrayList<Map<String, Consumer<Continuation>>> getHandlersStack() {
         return handlersStack;
     }
 
-    public void setHandlersStack(ArrayList<Map<Effect, Consumer<Continuation>>> handlersStack) {
+    public void setHandlersStack(ArrayList<Map<String, Consumer<Continuation>>> handlersStack) {
         this.handlersStack = handlersStack;
     }
 
     Context() {
-        effect = NONE;
+        effect = null;
         param = null;
         result = null;
         handlersStack = new ArrayList<>();

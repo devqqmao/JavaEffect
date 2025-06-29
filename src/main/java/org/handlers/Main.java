@@ -5,8 +5,7 @@ import org.handlers.Continuation.Continuation;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import static org.handlers.Effects.Effect.*;
-import static org.handlers.Effects.Handle.*;
+import static org.handlers.Handlers.Handle.*;
 
 public class Main {
 
@@ -18,11 +17,11 @@ public class Main {
 
     public static Object dependency_injection() {
         Object res = handle(
-                Map.of(ASK, (k) -> {
+                Map.of("ASK", (k) -> {
                             context.setResult(2);
                             k.run();
                         }
-                        , PUT, Continuation::run
+                        , "PUT", Continuation::run
                 )
                 , () -> {
                     put(ask());
@@ -34,7 +33,7 @@ public class Main {
 
     public static Object generator(Integer n) {
         Object res = handle(
-                Map.of(NEXT, (k) -> {
+                Map.of("NEXT", (k) -> {
                             Integer i = 0;
                             while (i < n && !k.isDone()) {
                                 context.setResult(i);
@@ -59,11 +58,11 @@ public class Main {
 
     public static Object nested_handling() {
         Object res = handle(
-                Map.of(PUT, Continuation::run
+                Map.of("PUT", Continuation::run
                 )
                 , () -> {
                     Object res0 = handle(
-                            Map.of(ASK, (k) -> {
+                            Map.of("ASK", (k) -> {
                                         context.setResult(2);
                                         k.run();
                                     }
