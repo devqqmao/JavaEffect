@@ -8,9 +8,8 @@ import java.util.function.Consumer;
 
 public class Context {
 
-    public String effect;
-    public Object param;
-    public Object result;
+    private String effect;
+    private Object state;
     public ArrayList<Map<String, Consumer<Continuation>>> handlersStack;
 
     public String getEffect() {
@@ -21,20 +20,12 @@ public class Context {
         this.effect = effect;
     }
 
-    public Object getParam() {
-        return param;
+    public Object getState() {
+        return state;
     }
 
-    public void setParam(Object param) {
-        this.param = param;
-    }
-
-    public Object getResult() {
-        return result;
-    }
-
-    public void setResult(Object result) {
-        this.result = result;
+    public void setState(Object state) {
+        this.state = state;
     }
 
     public ArrayList<Map<String, Consumer<Continuation>>> getHandlersStack() {
@@ -47,8 +38,7 @@ public class Context {
 
     Context() {
         effect = null;
-        param = null;
-        result = null;
+        state = null;
         handlersStack = new ArrayList<>();
     }
 }

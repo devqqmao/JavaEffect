@@ -16,22 +16,17 @@ public class Handle {
         scope = new ContinuationScope("Handle");
     }
 
-    public static Object ask() {
-        context.effect = "ASK";
+    public static Object perform(String effect, Object state) {
+        context.setEffect(effect);
+        context.setState(state);
         Continuation.yield(scope);
-        return context.getResult();
+        return context.getState();
     }
 
-    public static void put(Object p) {
-        context.effect = "PUT";
-        context.result = p;
+    public static Object perform(String effect) {
+        context.setEffect(effect);
         Continuation.yield(scope);
-    }
-
-    public static Object next() {
-        context.effect = "NEXT";
-        Continuation.yield(scope);
-        return context.getResult();
+        return context.getState();
     }
 
     public static void handleEffect(Continuation k) {
@@ -63,6 +58,6 @@ public class Handle {
 
         context.handlersStack.removeLast();
 
-        return context.getResult();
+        return context.getState();
     }
 }

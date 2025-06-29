@@ -11,32 +11,35 @@ public class Main {
 
     public static void main(String[] args) {
         dependency_injection();
-        generator(2);
+        iterator(2);
         nested_handling();
     }
 
     public static Object dependency_injection() {
         Object res = handle(
                 Map.of("ASK", (k) -> {
-                            context.setResult(2);
+                            context.setState(2);
                             k.run();
                         }
-                        , "PUT", Continuation::run
+                        , "PUT", (k) -> {
+                            k.run();
+                        }
                 )
                 , () -> {
-                    put(ask());
+                    Object x = perform("ASK");
+                    perform("PUT", x);
                 }
         );
 
         return res;
     }
 
-    public static Object generator(Integer n) {
+    public static Object iterator(Integer n) {
         Object res = handle(
                 Map.of("NEXT", (k) -> {
                             Integer i = 0;
                             while (i < n && !k.isDone()) {
-                                context.setResult(i);
+                                context.setState(i);
                                 i += 1;
                                 k.run();
                             }
@@ -48,7 +51,7 @@ public class Main {
                 , () -> {
                     Integer i = 0;
                     while (i < n) {
-                        next();
+                        perform("NEXT");
                         i += 1;
                     }
                 }
@@ -63,7 +66,7 @@ public class Main {
                 , () -> {
                     Object res0 = handle(
                             Map.of("ASK", (k) -> {
-                                        context.setResult(2);
+                                        context.setState(2);
                                         k.run();
                                     }
                             )
@@ -72,13 +75,13 @@ public class Main {
                                         Map.of(
                                         )
                                         , () -> {
-                                            Object x = ask();
-                                            put(x);
+                                            Object x = perform("ASK");
+                                            perform("PUT", x);
                                         }
                                 );
                             }
                     );
-                    put(res0);
+                    perform("PUT", res0);
 //                    ask(); will throw
                 }
         );

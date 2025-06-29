@@ -26,7 +26,7 @@ public class GeneratorBenchmark {
 
     @Benchmark
     public void javaContinuationGenerator(Blackhole blackhole) {
-        blackhole.consume(Main.generator(size));
+        blackhole.consume(Main.iterator(size));
     }
 
 
