@@ -12,7 +12,6 @@ public class Main {
     public static void main(String[] args) {
         System.out.println(dependency_injection());
         System.out.println(nested_handling());
-        System.out.println(generator(3));
     }
 
     public static Object pure_effect() {
@@ -63,29 +62,6 @@ public class Main {
         return res;
     }
 
-    public static Object generator(Integer n) {
-        return handle(
-                Map.of("NEXT", (k) -> {
-                            Integer i = 0;
-                            while (i < n && !k.isDone()) {
-                                setState(i);
-                                i += 1;
-                                k.run();
-                            }
-                            if (!k.isDone()) {
-                                throw new NoSuchElementException();
-                            }
-                        }
-                )
-                , () -> {
-                    Integer i = 0;
-                    while (i < n) {
-                        perform("NEXT");
-                        i++;
-                    }
-                }
-        );
-    }
 
     public static Object nested_handling() {
         Object res0 = handle(
