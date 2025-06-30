@@ -2,7 +2,6 @@ package org.handlers;
 
 import org.handlers.Continuation.Continuation;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -11,14 +10,15 @@ import static org.handlers.Handlers.Handle.*;
 public class Main {
 
     public static void main(String[] args) {
-//        dependency_injection();
-//        nested_handling();
-        generator(3);
+        System.out.println(dependency_injection());
+        System.out.println(nested_handling());
+        System.out.println(generator(3));
     }
 
     public static Object pure_effect() {
         return handle(
-                Map.of("ASK", Continuation::run
+                Map.of("ASK", (k) -> {
+                        }
                 )
                 , () -> {
                     perform("ASK");
@@ -38,7 +38,6 @@ public class Main {
         return handle(
                 Map.of("ASK", (k) -> {
                             setState(0);
-                            k.run();
                         }
                 )
                 , () -> {
@@ -51,10 +50,8 @@ public class Main {
         Object res = handle(
                 Map.of("ASK", (k) -> {
                             setState(2);
-                            k.run();
                         }
                         , "PUT", (k) -> {
-                            k.run();
                         }
                 )
                 , () -> {
@@ -92,13 +89,13 @@ public class Main {
 
     public static Object nested_handling() {
         Object res0 = handle(
-                Map.of("PUT", Continuation::run
+                Map.of("PUT", (k) -> {
+                        }
                 )
                 , () -> {
                     Object res1 = handle(
                             Map.of("ASK", (k) -> {
                                         context.setState(2);
-                                        k.run();
                                     }
                             )
                             , () -> {

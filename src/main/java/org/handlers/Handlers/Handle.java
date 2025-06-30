@@ -57,9 +57,9 @@ public class Handle {
 
         context.getHandlersStack().add(handlers);
 
-        k.run();
 
         while (!k.isDone()) {
+            k.run();
             handleEffect(k);
         }
 
